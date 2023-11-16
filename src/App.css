@@ -1,0 +1,51 @@
+@import url("https://fonts.googleapis.com/css2?family=Inter&display=swap");
+
+.bg_body {
+  background: url("assets/form_background.webp") center center no-repeat;
+  background-size: cover;
+  filter: blur(2px);
+  z-index: -1;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  right: 0;
+}
+
+/* .button::before {
+  content: "";
+  position: absolute;
+  width: 120%;
+  height: 140%;
+  border-radius: 50%;
+  left: -10%;
+  top: 100%;
+  transition: all 0.5s 0.1s cubic-bezier(0.55, 0, 0.1, 1);
+  z-index: -1;
+  background-color: rgb(16, 123, 185) !important;
+}
+
+.button:hover::before {
+  transform: translateY(-50%) scaleY(2.5) scaleX(1);
+} */
+
+.button:hover {
+  transition: all 0.5s 0.1s cubic-bezier(0.55, 0, 0.1, 1);
+  /* color: black !important;  */
+  /* z-index: 5; */
+}
+
+.sign_in {
+  /* background: url("assets/form_background.webp") center center no-repeat; */
+  background-size: cover;
+}
+
+header {
+  font-family: "Inter", sans-serif;
+}
+
+
+
+.password_message_criteria{
+  font-size: 0.65rem;
+}
