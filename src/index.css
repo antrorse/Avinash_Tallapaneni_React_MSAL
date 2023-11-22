@@ -18,7 +18,3 @@ input {
   outline: none;
   cursor: pointer;
 }
-
-#login_form > div > div > div > img {
-  background-color: white;
-}

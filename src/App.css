@@ -1,18 +1,26 @@
-@import url("https://fonts.googleapis.com/css2?family=Inter&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Inter:wght@400;600&family=Poppins:wght@1,200&family=Syne&display=swap");
+
+body {
+  font-family: "Poppins", sans-serif;
+}
 
 .bg_body {
-  background: url("assets/form_background.webp") center center no-repeat;
   background-size: cover;
-  filter: blur(2px);
   z-index: -1;
   top: 0;
   left: 0;
   width: 100vw;
   height: 100vh;
   right: 0;
+  overflow: hidden;
+  background: linear-gradient(
+    0deg,
+    rgba(181, 112, 100, 0.8) 00%,
+    rgba(36, 117, 122, 0.8) 100%
+  );
 }
 
-/* .button::before {
+.button::before {
   content: "";
   position: absolute;
   width: 120%;
@@ -22,30 +30,113 @@
   top: 100%;
   transition: all 0.5s 0.1s cubic-bezier(0.55, 0, 0.1, 1);
   z-index: -1;
-  background-color: rgb(16, 123, 185) !important;
+  background-color: rgba(181, 112, 100, 0.8) !important;
 }
 
 .button:hover::before {
   transform: translateY(-50%) scaleY(2.5) scaleX(1);
-} */
+}
 
 .button:hover {
   transition: all 0.5s 0.1s cubic-bezier(0.55, 0, 0.1, 1);
-  /* color: black !important;  */
-  /* z-index: 5; */
-}
-
-.sign_in {
-  /* background: url("assets/form_background.webp") center center no-repeat; */
-  background-size: cover;
 }
 
 header {
   font-family: "Inter", sans-serif;
 }
 
-
-
-.password_message_criteria{
+.password_message_criteria {
   font-size: 0.65rem;
+}
+
+.bg_foreground {
+  background: url("assets/background.jpg") center center no-repeat;
+  background-size: cover;
+  clip-path: polygon(
+    100% 0,
+    20% 0,
+    100% 75%,
+    100% 100%,
+    0 100%,
+    0 75%,
+    25% 100%,
+    100% 100%
+  );
+}
+.bg_background {
+  background: linear-gradient(
+    180deg,
+    rgba(15, 141, 153, 1) 0%,
+    rgba(3, 81, 93, 1) 100%
+  );
+}
+
+.icons_mail {
+  fill: rebeccapurple !important;
+}
+
+:checked {
+  accent-color: rgba(15, 141, 153, 1);
+}
+
+header {
+  text-shadow: 5px 5px 5px rgba(3, 81, 93, 1);
+  /* font-style: italic; */
+  letter-spacing: 4px;
+  font-family: "Poppins", sans-serif;
+  position: relative;
+}
+
+header::before {
+  content: "";
+  position: absolute;
+  width: 2.5rem;
+  height: 5px;
+  background-color: rgb(255, 155, 41);
+  top: 100%;
+  left: 1%;
+}
+
+.sign-up {
+  position: relative;
+}
+.sign-up::before {
+  content: "";
+  position: absolute;
+  width: 2rem;
+  height: 3px;
+  background-color: rgb(255, 155, 41);
+  top: 120%;
+  left: 10%;
+}
+
+.AvinashTallapaneni {
+  position: relative;
+  font-style: italic;
+  font-weight: 600;
+  text-shadow: 2px -2px 5px rgba(3, 81, 93, 1);
+}
+
+.AvinashTallapaneni::before {
+  content: "";
+  position: absolute;
+  width: 9.5rem;
+  height: 2px;
+  background-color: rgb(59, 75, 218);
+  top: 120%;
+  left: 0%;
+}
+
+.valid {
+  fill: rgb(59, 218, 70) !important;
+  color: rgb(59, 218, 70) !important;
+}
+
+.invalid,
+.password_message_criteria,
+.error_message {
+  fill: rgb(255, 155, 41) !important;
+  font-weight: 600;
+  font-size: 0.65rem;
+  color: rgb(255, 155, 41) !important;
 }

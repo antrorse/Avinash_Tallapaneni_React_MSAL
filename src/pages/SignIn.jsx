@@ -1,210 +1,181 @@
 import React, { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 
-import {
-  email as EmailIcon,
-  eyeClose as PasswordHide,
-  eyeOpen as PasswordShow,
-  lock as LockIcon,
-} from "../assets/imageExport";
-// import {ReactComponent as EmailIcon} from "../assets/envelope-solid.svg";
+import MailIcon from "../components/icons/MailIcon";
+import PasswordHide from "../components/icons/PasswordHide";
+import PasswordShow from "../components/icons/PasswordShow";
+import Lock from "../components/icons/Lock";
 
 const SignIn = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [emailError, setEmailError] = useState("");
-  const [passwordError, setPasswordError] = useState("");
-  const [errorMessage, setErrorMessage] = useState({
-    email: {
-      invalid: "Please enter valid Email",
-      incorrect: "please enter correct Email",
-    },
-    password: {
-      incorrect: "please enter correct Password",
-    },
+  const errorMessage = {
+    email: "please enter valid Email",
+    password: "please enter correct Password",
+  };
+
+  const [error, setError] = useState({
+    email: false,
+    password: false,
   });
+
   const [showCredentials, setshowCredentials] = useState(false);
-  const [logged, setLogged] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
-  const navigate = useNavigate();
 
   const Credentials = {
     email: "avinash_tallapaneni@twitter.com",
     password: "Password123",
   };
+  const navigate = useNavigate();
+
+  const [loginClicked, setLoginClicked] = useState(false);
 
   const validateEmail = (e) => {
     const emailValidation = e.target.value;
-
     const emailRegex =
       /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
 
-    setEmail(() => {
-      if (emailRegex.test(emailValidation)) {
-        setEmailError(() => "valid");
-      } else {
-        setEmailError(() => "invalid");
-      }
-      return emailValidation; // return the updated value
-    });
+    const testEmail = emailRegex.test(emailValidation);
+    setError((prev) => ({ ...prev, email: testEmail }));
   };
 
   const handleSubmit = (e) => {
     e.preventDefault();
 
+    setLoginClicked(true);
+
     if (email === Credentials.email && password === Credentials.password) {
       console.log("working");
-      setLogged(true);
+      navigate("/mainpage");
     } else {
-      if (email !== Credentials.email) {
-        setEmailError(() => "incorrect");
-      } else {
-        setEmailError(() => "");
-      }
-
-      if (password !== Credentials.password) {
-        setPasswordError(() => "incorrect");
-      } else {
-        setPasswordError(() => "");
-      }
-
-      setLogged(false);
+      setError((prev) => ({
+        ...prev,
+        email: email === Credentials.email,
+        password: password === Credentials.password,
+      }));
     }
   };
 
   useEffect(() => {
-    logged ? navigate("/signup") : navigate("/");
-  }, [logged, errorMessage]);
+    console.log(error);
+  }, []);
 
   return (
-    <div className="w-[900px]  flex justify-center items-strech  rounded-xl  overflow-hidden text-center ">
-      <div className="bg_body absolute"></div>
+    <div className="w-[900px] h-[500px] bg_background flex justify-start items-start  relative">
+      <div className="bg_foreground w-full h-full absolute"></div>
 
-      {/* <div className="w-3/6 LeftSideImage ">
-        <img src={LeftSideImage} alt="Left Side Image" />
-      </div> */}
-
-      <div className=" sign_in  w-3/6 px-5 p-5 flex flex-col bg-slate-100 gap-5 rounded-md">
+      <div className="pl-10 text-slate-100 z-10 flex flex-col gap-10 justify-center pt-10">
         <form
-          id="login_form"
+          action=""
+          className="flex flex-col gap-5 p-2"
           onSubmit={handleSubmit}
-          className="flex flex-col gap-10 w-auto"
         >
-          <header className="text-5xl ">
-            <h1>Sign In</h1>
+          <header className="text-5xl  ">
+            <p>Sign In</p>
           </header>
 
-          <div className="flex flex-col gap-5">
-            <div className="flex flex-col gap-1 items-start ">
-              <div
-                className={`flex items-center justify-start gap-2 text-lg ring-1 ${
-                  emailError === ""
-                    ? "ring-blue-400"
-                    : emailError === "invalid" || emailError === "incorrect"
-                    ? "ring-red-400"
-                    : "ring-green-400"
-                } px-1 rounded w-full`}
-              >
-                <img src={EmailIcon} alt="" width={20} height={20} />
-                {/* <EmailIcon fill="red" /> */}
+          <div className="flex flex-col gap-1 items-start ">
+            <div className={"flex gap-2 border-b-2 w-full items-center"}>
+              <MailIcon fill="white" width={20} height={20} />
 
-                <input
-                  id="email"
-                  className="w-full text-lg"
-                  aria-label="email"
-                  // type="email"
-                  placeholder="Enter your Email"
-                  autoComplete="off"
-                  onChange={(e) => validateEmail(e)}
-                  // value={email}
-                />
-              </div>
-              <small className="error_message text-red-500">
-                {emailError === "" || emailError === "valid"
-                  ? ""
-                  : emailError === "invalid"
-                  ? errorMessage.email.invalid
-                  : errorMessage.email.incorrect}
-              </small>
+              <input
+                id="email"
+                className="w-full text-lg"
+                aria-label="email"
+                placeholder="Enter your Email"
+                autoComplete="off"
+                onChange={(e) => {
+                  setEmail(e.target.value);
+                  validateEmail(e);
+                }}
+              />
             </div>
-            <div className="flex flex-col gap-1 items-start ">
-              <div
-                className={`flex items-center justify-start gap-2 text-lg ring-1 ${
-                  passwordError === "incorrect"
-                    ? "ring-red-400"
-                    : "ring-blue-400"
-                } px-1 rounded w-full`}
-              >
-                <img src={LockIcon} alt="" width={20} height={20} />
-                <input
-                  id="password"
-                  className="w-full text-lg"
-                  aria-label="password"
-                  type={showPassword ? "text" : "password"}
-                  placeholder="Enter your Password"
-                  autoComplete="off"
-                  onChange={(e) => setPassword(e.target.value)}
-                  //   value={email}
-                />
-                <img
-                  src={showPassword ? PasswordShow : PasswordHide}
-                  alt=""
-                  width={20}
-                  height={20}
-                  className="cursor-pointer"
-                  onClick={() => setShowPassword((prev) => !prev)}
-                />
-              </div>
-              <small className="error_message text-start text-red-500">
-                {passwordError === "incorrect"
-                  ? errorMessage.password.incorrect
-                  : " "}
-              </small>
-            </div>
-            <div className="flex items-center justify-between">
-              <div className="flex items-center justify-center">
-                <input type="checkbox" id="remember-me" />
-                <label htmlFor="remember-me"> Remember me</label>
-              </div>
-
-              <div
-                className="text-blue-500 hover:text-purple-800 text-sm font-semibold cursor-pointer"
-                onClick={() => setshowCredentials((prev) => !prev)}
-              >
-                Forgot Password? (<span className="text-xs">Credentials</span>)
-              </div>
-            </div>
-            {showCredentials ? (
-              <div className=" text-xs font-semibold text-start ">
-                {Object.entries(Credentials).map((credit, value) => {
-                  return (
-                    <div className="flex" key={value}>
-                      <span style={{ textTransform: "capitalize" }}>
-                        {credit[0]}
-                      </span>
-                      <span>{`: ${credit[1]}`}</span>
-                      <br />
-                    </div>
-                  );
-                })}
-              </div>
-            ) : (
-              ""
-            )}
-            <button
-              type="submit"
-              className="button outline rounded ring-2 ring-blue-400 w-2/6 text-lg mx-auto relative outline-none overflow-hidden z-0  "
-            >
-              Login Now
-            </button>
+            <small className="error_message text-red-500">
+              {loginClicked && email.length === 0
+                ? errorMessage.email
+                : email.length === 0 || error.email
+                ? ""
+                : errorMessage.email}
+            </small>
           </div>
-        </form>
 
-        <p className="sign-up">
+          <div className="flex flex-col gap-1 items-start ">
+            <div className={`flex gap-2 border-b-2 w-full items-center`}>
+              <Lock fill="white" width={20} height={20} />
+
+              <input
+                id="password"
+                className="w-full text-lg"
+                aria-label="password"
+                type={showPassword ? "text" : "password"}
+                placeholder="Enter your Password"
+                autoComplete="off"
+                onChange={(e) => setPassword(e.target.value)}
+              />
+
+              <div
+                className="cursor-pointer"
+                onClick={() => setShowPassword((prev) => !prev)}
+              >
+                {showPassword ? (
+                  <PasswordShow fill="white" width={20} height={20} />
+                ) : (
+                  <PasswordHide fill="white" width={20} height={20} />
+                )}
+              </div>
+            </div>
+            <small className="error_message text-start text-red-500">
+              {loginClicked
+                ? !error.password
+                  ? errorMessage.password
+                  : ""
+                : ""}
+            </small>
+          </div>
+
+          <div className="flex items-center justify-between gap-5">
+            <div className="flex items-center justify-center text-lg gap-1">
+              <input type="checkbox" id="remember-me" />
+              <label htmlFor="remember-me"> Remember me</label>
+            </div>
+
+            <div
+              className=" hover:text-red-300 text-sm font-semibold cursor-pointer"
+              onClick={() => setshowCredentials((prev) => !prev)}
+            >
+              Forgot Password? (
+              <span className="text-xs">Demo Credentials</span>)
+            </div>
+          </div>
+          {showCredentials ? (
+            <div className=" text-xs font-semibold text-start ">
+              {Object.entries(Credentials).map((credit, value) => {
+                return (
+                  <div className="flex" key={value}>
+                    <span style={{ textTransform: "capitalize" }}>
+                      {credit[0]}
+                    </span>
+                    <span>{`: ${credit[1]}`}</span>
+                    <br />
+                  </div>
+                );
+              })}
+            </div>
+          ) : (
+            ""
+          )}
+          <button
+            type="submit"
+            className="button outline rounded ring-2 ring-white w-2/6 text-lg mx-auto relative outline-none overflow-hidden z-0  "
+          >
+            Login Now
+          </button>
+        </form>
+        <p className=" text-md ">
           Don't have an account?
           <Link
             to="/signup"
-            className="text-blue-400 hover:text-purple-800 font-semibold"
+            className=" sign-up font-semibold hover:text-red-300 text-slate-100 text-xl"
           >
             {" "}
             Sign Up

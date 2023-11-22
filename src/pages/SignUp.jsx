@@ -1,26 +1,30 @@
 import React, { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 
-import {
-  email as EmailIcon,
-  eyeClose as PasswordHide,
-  eyeOpen as PasswordShow,
-  lock as LockIcon,
-} from "../assets/imageExport";
+import MailIcon from "../components/icons/MailIcon";
+import PasswordHide from "../components/icons/PasswordHide";
+import PasswordShow from "../components/icons/PasswordShow";
+import Lock from "../components/icons/Lock";
+import Correct from "../components/icons/Correct";
+import Wrong from "../components/icons/Wrong";
 
 const SignUp = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
-  const [emailError, setEmailError] = useState("");
-  const [passwordError, setPasswordError] = useState("");
-  const [errorMessage, setErrorMessage] = useState({
-    email: {
-      invalid: "Email is mandatory and valid.",
-    },
-    password: {
-      incorrect: "please enter correct Password",
-    },
+
+  const errorMessage = {
+    email: "please enter valid Email",
+    confirmPassword: "please enter same Password",
+  };
+  const [error, setError] = useState({
+    email: false,
+    confirmPassword: false,
+  });
+
+  const [showPassword, setShowPassword] = useState({
+    password: false,
+    confirmPassword: false,
   });
 
   const [passwordValid, setPasswordValid] = useState({
@@ -30,36 +34,19 @@ const SignUp = () => {
     uppercase: false,
     special: false,
   });
-  const [showCredentials, setshowCredentials] = useState(false);
-  const [logged, setLogged] = useState(false);
-  const [showPassword, setShowPassword] = useState(false);
-  const navigate = useNavigate();
 
-  const Credentials = {
-    email: "avinash_tallapaneni@twitter.com",
-    password: "Password123",
-  };
+  const navigate = useNavigate();
 
   const validateEmail = (e) => {
     const emailValidation = e.target.value;
-
     const emailRegex =
       /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
 
-    setEmail(() => {
-      if (emailRegex.test(emailValidation)) {
-        console.log("matched", emailRegex.test(emailValidation));
-        setEmailError(() => "valid");
-      } else {
-        console.log("not matched", emailRegex.test(emailValidation));
-        setEmailError(() => "invalid");
-      }
-      return emailValidation; // return the updated value
-    });
+    const testEmail = emailRegex.test(emailValidation);
+    setError((prev) => ({ ...prev, email: testEmail }));
   };
 
   const validatePasswordRegex = (e) => {
-    console.log("triggred");
     const passwordValidation = e.target.value;
 
     const passwordRegex = {
@@ -86,235 +73,240 @@ const SignUp = () => {
 
   const validatePassword = (e) => {
     const allPropertiesTrue = Object.values(passwordValid).every(
-      (value) => value === true
+      (value) => value
     );
-    console.log("here");
 
-    setPasswordError(() => {
-      if (password === confirmPassword && allPropertiesTrue) {
-        return "";
-      } else {
-        return "error";
-      }
-    });
+    const passwordValidAndSame =
+      allPropertiesTrue && password === confirmPassword;
 
-    // if (password === confirmPassword && allPropertiesTrue) {
-    //   console.log(password === confirmPassword, allPropertiesTrue, "inside");
-    //   setPasswordError("");
-    // } else {
-    //   setPasswordError("error");
-    //   console.log(password === confirmPassword, allPropertiesTrue, "outside");
-    // }
+    setError((prev) => ({ ...prev, confirmPassword: passwordValidAndSame }));
+
+    // setPasswordError(() => {
+    //   if (password === confirmPassword && allPropertiesTrue) {
+    //     return "";
+    //   } else {
+    //     return "error";
+    //   }
+    // });
   };
 
   const handleSubmit = (e) => {
     e.preventDefault();
 
-    if (emailError === "valid" && passwordError === "error") {
-      navigate("/mainpage")
+    if (error.email && error.confirmPassword) {
+      navigate("/mainpage");
     }
   };
 
-  useEffect(() => {
-    console.log(emailError, "useEffect");
-  }, [
-    logged,
-    emailError,
-    passwordError,
-    confirmPassword,
-    passwordValid,
-    validatePassword,
-  ]);
-  return (
-    <div className="w-[900px]  flex justify-center items-strech  rounded-xl  overflow-hidden text-center ">
-      <div className="bg_body absolute"></div>
+  // useEffect(() => {
+  //   validatePassword();
+  //   // setEmailError(() => "");
+  // }, [
+  //   emailError,
+  //   passwordError,
+  //   confirmPassword,
+  //   passwordValid,
+  //   validatePassword,
+  // ]);
 
-      <div className=" sign_in  w-3/6 px-5 p-5 flex flex-col bg-slate-100 gap-5 rounded-md">
+  useEffect(() => {
+    validatePassword();
+  }, [confirmPassword]);
+
+  return (
+    <div className="w-[900px] h-[500px] bg_background flex justify-start items-start relative">
+      <div className="bg_foreground w-full h-full absolute"></div>
+
+      <div className="pl-10  text-slate-100 z-10 flex flex-col gap-3 justify-center pt-10">
         <form
-          id="login_form"
+          action=""
+          className="flex flex-col gap-5 p-2"
           onSubmit={handleSubmit}
-          className="flex flex-col gap-10 w-auto"
         >
           <header className="text-5xl ">
-            <h1>Registration</h1>
+            <p>Registration</p>
           </header>
 
-          <div>
-            <div className="flex flex-col gap-1 items-start ">
-              <div
-                className={`flex items-center justify-start gap-2 text-lg ring-1 ${
-                  emailError === ""
-                    ? "ring-blue-400"
-                    : emailError === "invalid" || emailError === "incorrect"
-                    ? "ring-red-400"
-                    : "ring-green-400"
-                } px-1 rounded w-full`}
-              >
-                <img src={EmailIcon} alt="" width={20} height={20} />
+          <div className="flex flex-col gap-1 items-start ">
+            <div className={"flex gap-2 border-b-2 w-full items-center"}>
+              <MailIcon fill="white" width={20} height={20} />
 
-                <input
-                  id="email"
-                  className="w-full text-lg"
-                  aria-label="email"
-                  // type="email"
-                  placeholder="Enter your Email"
-                  autoComplete="off"
-                  onChange={(e) => validateEmail(e)}
-                  // value={email}
-                />
-              </div>
-              <small className="error_message text-red-500">
-                {emailError === ""
-                  ? ""
-                  : emailError === "valid"
-                  ? ""
-                  : errorMessage.email.invalid}
-              </small>
+              <input
+                id="email"
+                className="w-full text-lg"
+                aria-label="email"
+                placeholder="Enter your Email"
+                autoComplete="off"
+                onChange={(e) => {
+                  setEmail(e.target.value);
+                  validateEmail(e);
+                }}
+              />
             </div>
+            <small className="error_message">
+              {email.length === 0 || error.email ? "" : errorMessage.email}
+            </small>
+          </div>
 
-            <div className="flex flex-col gap-1 items-start ">
+          <div className="flex flex-col gap-2 items-start ">
+            <div className={`flex gap-2 border-b-2 w-full items-center`}>
+              <Lock fill="white" width={20} height={20} />
+
+              <input
+                id="password"
+                className="w-full text-lg"
+                aria-label="password"
+                type={showPassword.password ? "text" : "password"}
+                placeholder="Enter your Password"
+                autoComplete="off"
+                onChange={(e) => {
+                  setPassword(e.target.value);
+                  validatePasswordRegex(e);
+                }}
+              />
+
               <div
-                className={`flex items-center justify-start gap-2 text-lg ring-1 ${
-                  passwordError === "incorrect"
-                    ? "ring-red-400"
-                    : "ring-blue-400"
-                } px-1 rounded w-full`}
+                className="cursor-pointer"
+                onClick={() =>
+                  setShowPassword((prev) => ({
+                    ...prev,
+                    password: !showPassword.password,
+                  }))
+                }
               >
-                <img src={LockIcon} alt="" width={20} height={20} />
-                <input
-                  id="password"
-                  className="w-full text-lg"
-                  aria-label="password"
-                  type={showPassword ? "text" : "password"}
-                  placeholder="Enter your Password"
-                  autoComplete="off"
-                  onChange={(e) => {
-                    setPassword(() => e.target.value);
-                    validatePasswordRegex(e);
-                  }}
-                  //   value={email}
-                />
-                <img
-                  src={showPassword ? PasswordShow : PasswordHide}
-                  alt=""
-                  width={20}
-                  height={20}
-                  className="cursor-pointer"
-                  onClick={() => setShowPassword((prev) => !prev)}
-                />
+                {showPassword.password ? (
+                  <PasswordShow fill="white" width={20} height={20} />
+                ) : (
+                  <PasswordHide fill="white" width={20} height={20} />
+                )}
               </div>
-              <small className="password_message_criteria text-start text-red-500 ">
-                <p className="text-sm">Your Password should:</p>
-                <ul className="requirement-list">
-                  <li>
-                    <span
-                      className={`${
-                        passwordValid.length ? "text-green-500" : "text-red-500"
-                      }`}
-                    >
-                      be atlease 8 characters long.
-                    </span>
-                  </li>
-                  <li>
-                    <span
-                      className={`${
-                        passwordValid.number ? "text-green-500" : "text-red-500"
-                      }`}
-                    >
-                      contain atleast 1 number (0...9)
-                    </span>
-                  </li>
-                  <li>
-                    <span
-                      className={`${
-                        passwordValid.lowercase
-                          ? "text-green-500"
-                          : "text-red-500"
-                      }`}
-                    >
-                      contain atleast 1 lowercase letter (a...z)
-                    </span>
-                  </li>
-                  <li>
-                    <span
-                      className={`${
-                        passwordValid.uppercase
-                          ? "text-green-500"
-                          : "text-red-500"
-                      }`}
-                    >
-                      Should contain atleast 1 uppercase letter (A...Z)
-                    </span>
-                  </li>
-                  <li>
-                    <span
-                      className={`${
-                        passwordValid.special
-                          ? "text-green-500"
-                          : "text-red-500"
-                      }`}
-                    >
-                      contain atleast 1 special symbol (!...$)
-                    </span>
-                  </li>
-                </ul>
-              </small>
             </div>
-            <div className="flex flex-col gap-1 items-start ">
+            <small className="password_message_criteria text-start  flex flex-col gap-1 ">
+              <p className="text-xs">Your Password should:</p>
+              <ul className="requirement-list">
+                <li>
+                  <span
+                    className={` flex items-center gap-1  ${
+                      passwordValid.length ? "valid" : "invalid"
+                    }`}
+                  >
+                    {passwordValid.length ? (
+                      <Correct width={10} height={10} />
+                    ) : (
+                      <Wrong width={10} height={10} />
+                    )}
+                    be atlease 8 characters long.
+                  </span>
+                </li>
+                <li>
+                  <span
+                    className={` flex items-center gap-1 ${
+                      passwordValid.number ? "valid" : "invalid"
+                    }`}
+                  >
+                    {passwordValid.number ? (
+                      <Correct width={10} height={10} />
+                    ) : (
+                      <Wrong width={10} height={10} />
+                    )}
+                    contain atleast 1 number (0...9)
+                  </span>
+                </li>
+                <li>
+                  <span
+                    className={` flex items-center gap-1 ${
+                      passwordValid.lowercase ? "valid" : "invalid"
+                    }`}
+                  >
+                    {passwordValid.lowercase ? (
+                      <Correct width={10} height={10} />
+                    ) : (
+                      <Wrong width={10} height={10} />
+                    )}
+                    contain atleast 1 lowercase letter (a...z)
+                  </span>
+                </li>
+                <li>
+                  <span
+                    className={` flex items-center gap-1 ${
+                      passwordValid.uppercase ? "valid" : "invalid"
+                    }`}
+                  >
+                    {passwordValid.uppercase ? (
+                      <Correct width={10} height={10} />
+                    ) : (
+                      <Wrong width={10} height={10} />
+                    )}
+                    Should contain atleast 1 uppercase letter (A...Z)
+                  </span>
+                </li>
+                <li>
+                  <span
+                    className={` flex items-center gap-1 ${
+                      passwordValid.special ? "valid" : "invalid"
+                    }`}
+                  >
+                    {passwordValid.special ? (
+                      <Correct width={10} height={10} />
+                    ) : (
+                      <Wrong width={10} height={10} />
+                    )}
+                    contain atleast 1 special symbol (!...$)
+                  </span>
+                </li>
+              </ul>
+            </small>
+          </div>
+          <div className="flex flex-col gap-1 items-start ">
+            <div className={`flex gap-2 border-b-2 w-full items-center`}>
+              <Lock fill="white" width={20} height={20} />
+
+              <input
+                id="password"
+                className="w-full text-lg"
+                aria-label="password"
+                type={showPassword.confirmPassword ? "text" : "password"}
+                placeholder="Confirm Password"
+                autoComplete="off"
+                onChange={(e) => {
+                  setConfirmPassword(e.target.value);
+                  validatePassword(e);
+                }}
+              />
+
               <div
-                className={`flex items-center justify-start gap-2 text-lg ring-1 ${
-                  passwordError === "incorrect"
-                    ? "ring-red-400"
-                    : "ring-blue-400"
-                } px-1 rounded w-full`}
+                className="cursor-pointer"
+                onClick={() =>
+                  setShowPassword((prev) => ({
+                    ...prev,
+                    confirmPassword: !showPassword.confirmPassword,
+                  }))
+                }
               >
-                <img src={LockIcon} alt="" width={20} height={20} />
-                <input
-                  id="password"
-                  className="w-full text-lg"
-                  aria-label="password"
-                  type={showPassword ? "text" : "password"}
-                  placeholder="Enter your Password"
-                  autoComplete="off"
-                  onChange={(e) => {
-                    setConfirmPassword(() => e.target.value);
-                    validatePassword(e),
-                      console.log(e.target.value, "confirmPass");
-                  }}
-                  //   value={email}
-                />
-                <img
-                  src={showPassword ? PasswordShow : PasswordHide}
-                  alt=""
-                  width={20}
-                  height={20}
-                  className="cursor-pointer"
-                  onClick={() => setShowPassword((prev) => !prev)}
-                />
+                {showPassword.confirmPassword ? (
+                  <PasswordShow fill="white" width={20} height={20} />
+                ) : (
+                  <PasswordHide fill="white" width={20} height={20} />
+                )}
               </div>
-              <small className="password_message_criteria text-start text-red-500 ">
-                {passwordError.length === 0
-                  ? ""
-                  : passwordError === "error"
-                  ? "password should Match"
-                  : ""}
-              </small>
             </div>
+            <small className="password_message_criteria text-start ">
+              {error.confirmPassword ? "" : <p>Your password should match</p>}
+            </small>
           </div>
 
           <button
             type="submit"
-            className="button outline rounded ring-2 ring-blue-400 w-2/6 text-lg mx-auto relative outline-none overflow-hidden z-0  "
+            className="button outline rounded ring-2 ring-white w-2/6 text-lg mx-auto relative outline-none overflow-hidden z-0  "
           >
-            Register Now
+            Sign Up
           </button>
         </form>
-
-        <p className="sign-up">
-          Have an account?
+        <p className="text-md ">
+          Don't have an account?
           <Link
             to="/"
-            className="text-blue-400 hover:text-purple-800 font-semibold"
+            className=" sign-up font-semibold hover:text-red-300 text-slate-100 text-xl"
           >
             {" "}
             Sign In
