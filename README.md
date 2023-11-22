@@ -52,11 +52,11 @@ To get started with the Cine Spectrum app, follow these steps:
 
 The project structure is organized as follows:
 
-- src: Contains the source code of the Talloger.
-- components: Contains reusable components used throughout the app.
-- pages: Contains the main pages of the app.
-- App.js: The main component that renders the app.
-- index.js: The entry point of the app.
+- **src**: Contains the source code of the Talloger.
+- **components**: Contains reusable components used throughout the app.
+- **pages**: Contains the main pages of the app.
+- **App.js**: The main component that renders the app.
+- **index.js**: The entry point of the app.
 
 # Contributing
 
@@ -66,9 +66,8 @@ Contributions to the Cine Spectrum app are welcome! If you find any bugs or have
 
 My name is Avinash Tallapaneni, and I am a front-end web developer passionate about creating immersive and engaging user experiences. Talloger is a project that showcases my skills and dedication to building high-quality web applications.
 
-- Website - [Preview site on Netlify](https://cinespectrum.netlify.app/)
 - GitHub - [Your GitHub Profile](https://github.com/your-profile)
-- Twitter - [Twitter Profile](=https://twitter.com/TallapaneniAvi)
+- Twitter - [Twitter Profile](https://twitter.com/TallapaneniAvi)
 
 ## Feedback
 
